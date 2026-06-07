@@ -30,7 +30,7 @@ sudo mysql -uroot -e "CREATE USER 'zabbix'@'localhost' IDENTIFIED BY 'ConvPass00
 sudo mysql -uroot -e "GRANT ALL PRIVILEGES ON zabbix.* TO 'zabbix'@'localhost';"
 sudo mysql -uroot -e "SET GLOBAL log_bin_trust_function_creators = 1;"
 
-echo "=== [5/6] Zabbix初期データの流し込み (少々時間がかかります) ==="
+echo "=== [5/6] Zabbix初期データの流し込み  ==="
 # データベースに数万行の初期スキーマをインポート
 zcat /usr/share/zabbix-sql-scripts/mysql/server.sql.gz | mysql --default-character-set=utf8mb4 -uzabbix -p'ConvPass00' zabbix
 
@@ -58,12 +58,7 @@ sudo a2ensite default-ssl
 sudo sed -i "s|SSLCertificateFile.*|SSLCertificateFile /etc/ssl/certs/zabbix-selfsigned.crt|g" /etc/apache2/sites-available/default-ssl.conf
 sudo sed -i "s|SSLCertificateKeyFile.*|SSLCertificateKeyFile /etc/ssl/private/zabbix-selfsigned.key|g" /etc/apache2/sites-available/default-ssl.conf
 
-echo "=== [完了] すべてのサービスを起動・自動起動登録します ==="
+
 sudo systemctl restart zabbix-server zabbix-agent apache2
 sudo systemctl enable zabbix-server zabbix-agent apache2
 
-echo "--------------------------------------------------------"
-echo " 🎉 Zabbix 7.0 サーバーの土台構築が完了しました！"
-echo " 以下のURLからPCのブラウザでアクセスしてください（警告は続行してOK）"
-echo " URL: https://${SERVER_IP}/zabbix"
-echo "--------------------------------------------------------"
